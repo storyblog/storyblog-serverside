@@ -1,5 +1,5 @@
 'use strict';
-
+const mongoose = require('mongoose');
 const blogSchema = require('./schema/blog-schema');
 
 class Blog {
@@ -13,6 +13,11 @@ class Blog {
    */
   async create(blogObj) {
     const newBlogDocument = new blogSchema(blogObj);
+    newBlogDocument.contributions.push({
+      c_usernam: newBlogDocument.authorname,
+      added_content: newBlogDocument.content,
+      lastDate: newBlogDocument.date,
+    });
     return await newBlogDocument.save(blogObj);
   }
 
@@ -35,7 +40,8 @@ class Blog {
    * @param {ObjectId} blogId 
    * @param {Object} contributionBody
    */
-  async addToBlog(blogId, contributionBody) {
+  async addToBlog(id, contributionBody) {
+    const blogId = mongoose.Types.ObjectId(id);
     return await blogSchema.findOneAndUpdate({ _id: blogId }, { $push: { contributions: contributionBody } });
   }
 
