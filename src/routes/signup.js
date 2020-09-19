@@ -24,7 +24,7 @@ function signUpUser(req, res, next) {
           });
           res.send(token);
         }).catch(err => {
-          res.status(403).send('Invalid Signup! Username is taken');
+          res.status(403).send('Invalid Signup!');
         });
     }).catch(err => {
       res.status(403).send('Invalid Signup! Username is taken');

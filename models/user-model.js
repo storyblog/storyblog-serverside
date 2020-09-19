@@ -41,8 +41,8 @@ class User {
       return await userSchema.findOneAndUpdate({ username }, { $push: { c_blogs: { blogId } } });
     else if (action === 'append') { //check if the blogId exists in user's record or not, because a user/blog creator can append to the same blog more than once
       const hasBlogId = await userSchema.findOne({ username }, { c_blogs: { $elemMatch: { blogId } } });
-      if (!hasBlogId)
-        return await userSchema.findOneAndUpdate({ username }, { $push: { c_blogs: { blogId } } });
+      if (hasBlogId.c_blogs.length === 0)
+        return await userSchema.findOneAndUpdate({ username }, { $push: { c_blogs: { blogId } } }); 
     }
   }
 }
